@@ -61,7 +61,7 @@ function create() {
 
   this.timerText = this.add.text(10, 10, 'Time: 0', {
     fontSize: '20px',
-    fill: '#ffffff'
+    fill: '#000000'
   });
   this.timeRemaining = 60; // Adjust the time as needed
   this.timeEvent = this.time.addEvent({
