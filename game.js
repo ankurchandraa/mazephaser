@@ -53,35 +53,42 @@ function create() {
 
   // Set player position to the starting point
   this.player.setPosition(this.startPoint.x, this.startPoint.y);
+
   // Setup input
   this.cursors = this.input.keyboard.createCursorKeys();
 
-  // Touch support
-this.input.on('pointerdown', (pointer) => {
-  const touchX = pointer.x;
-  const touchY = pointer.y;
 
-  const dx = touchX - this.player.x;
-  const dy = touchY - this.player.y;
+  // Create a variable to store the last touch position
+  this.lastTouchPosition = null;
 
-  if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 0) {
-      this.player.setVelocityX(speed);
-    } else {
-      this.player.setVelocityX(-speed);
+  // Add pointerdown event listener
+  this.input.on('pointerdown', (pointer) => {
+    this.lastTouchPosition = {
+      x: pointer.x,
+      y: pointer.y
+    };
+  });
+
+  // Add pointerup event listener
+  this.input.on('pointerup', () => {
+    this.lastTouchPosition = null;
+  });
+
+  // Add pointermove event listener
+  this.input.on('pointermove', (pointer) => {
+    if (this.lastTouchPosition) {
+      const dx = pointer.x - this.lastTouchPosition.x;
+      const dy = pointer.y - this.lastTouchPosition.y;
+
+      this.lastTouchPosition = {
+        x: pointer.x,
+        y: pointer.y
+      };
+
+      this.player.setVelocityX(dx);
+      this.player.setVelocityY(dy);
     }
-  } else {
-    if (dy > 0) {
-      this.player.setVelocityY(speed);
-    } else {
-      this.player.setVelocityY(-speed);
-    }
-  }
-});
-
-this.input.on('pointerup', () => {
-  this.player.setVelocity(0, 0);
-});
+  });
 
 
   // Set up collisions
@@ -90,6 +97,8 @@ this.input.on('pointerup', () => {
       console.log('Collided with a wall');
     }
   });
+
+
 
   this.timerText = this.add.text(10, 10, 'Time: 0', {
     fontSize: '20px',
@@ -113,6 +122,8 @@ this.input.on('pointerup', () => {
     },
     loop: true,
   });
+
+
 
 }
 
