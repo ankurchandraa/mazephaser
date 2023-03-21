@@ -104,7 +104,7 @@ function create() {
     fontSize: '20px',
     fill: '#000000'
   });
-  this.timeRemaining = 60; // Adjust the time as needed
+  this.timeRemaining = 30; // Adjust the time as needed
   this.timeEvent = this.time.addEvent({
     delay: 1000,
     callback: () => {
