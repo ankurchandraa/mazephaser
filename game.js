@@ -1,7 +1,11 @@
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 800,
+    height: 600,
+  },
   backgroundColor: '#ffffff',
   physics: {
     default: 'matter',
@@ -51,6 +55,34 @@ function create() {
   this.player.setPosition(this.startPoint.x, this.startPoint.y);
   // Setup input
   this.cursors = this.input.keyboard.createCursorKeys();
+
+  // Touch support
+this.input.on('pointerdown', (pointer) => {
+  const touchX = pointer.x;
+  const touchY = pointer.y;
+
+  const dx = touchX - this.player.x;
+  const dy = touchY - this.player.y;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 0) {
+      this.player.setVelocityX(speed);
+    } else {
+      this.player.setVelocityX(-speed);
+    }
+  } else {
+    if (dy > 0) {
+      this.player.setVelocityY(speed);
+    } else {
+      this.player.setVelocityY(-speed);
+    }
+  }
+});
+
+this.input.on('pointerup', () => {
+  this.player.setVelocity(0, 0);
+});
+
 
   // Set up collisions
   this.matter.world.on('collisionstart', (event, bodyA, bodyB) => {
